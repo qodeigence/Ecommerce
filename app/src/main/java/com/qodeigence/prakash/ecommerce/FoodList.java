@@ -33,7 +33,7 @@ public class FoodList extends AppCompatActivity {
 
         //Firebase
         database = FirebaseDatabase.getInstance();
-        foodList = database.getReference("Foods");
+        foodList = database.getReference("Food");
 
         recyclerView = (RecyclerView)findViewById(R.id.recycler_food);
         recyclerView.setHasFixedSize(true);
