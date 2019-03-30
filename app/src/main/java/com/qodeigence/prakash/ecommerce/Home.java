@@ -33,7 +33,7 @@ public class Home extends AppCompatActivity
     FirebaseDatabase database;
     DatabaseReference category;
     TextView txtFullName;
-
+    FloatingActionButton floatingActionButton;
     RecyclerView recycler_menu;
     RecyclerView.LayoutManager layoutManager;
 
@@ -51,9 +51,9 @@ public class Home extends AppCompatActivity
         category = database.getReference("Category");
 
 
+                floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                Intent cartIntent = new Intent(Home.this,Cart.class);

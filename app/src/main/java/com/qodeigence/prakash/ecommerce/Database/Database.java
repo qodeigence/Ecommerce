@@ -13,52 +13,49 @@ import java.util.List;
 
 public class Database extends SQLiteAssetHelper {
 
-    private static final String DB_NAME="EatItDB.db";
-    private static final int DB_VER=1;
+    private static final String DB_NAME = "EatItDB.db";
+    private static final int DB_VER = 1;
+
     public Database(Context context) {
         super(context, DB_NAME, null, DB_VER);
     }
 
-    public List<Order> getCards()
-    {
-        SQLiteDatabase db =  getReadableDatabase();
+    public List<Order> getCards() {
+        SQLiteDatabase db = getReadableDatabase();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
-        String[] sqlSelect={"ProductName","ProductId","Quantity","Price","Discount"};
-        String sqlTable="OrderDetail";
+        String[] sqlSelect = {"ProductName", "Productid", "Quantity", "Price", "Discount"};
+        String sqlTable = "OrderDetail";
 
         qb.setTables(sqlTable);
-        Cursor c = qb.query(db,sqlSelect,null,null,null,null,null);
+        Cursor c = qb.query(db, sqlSelect, null, null, null, null, null);
 
         final List<Order> result = new ArrayList<>();
-        if(c.moveToFirst())
-        {
+        if (null != c && c.moveToFirst()) {
             do {
-                result.add(new Order(c.getString(c.getColumnIndex("ProductId")),
-                        c.getString(c.getColumnIndex("ProductName")),
+                result.add(new Order(c.getString(c.getColumnIndex("ProductName")),
+                        c.getString(c.getColumnIndex("Productid")),
                         c.getString(c.getColumnIndex("Quantity")),
                         c.getString(c.getColumnIndex("Price")),
                         c.getString(c.getColumnIndex("Discount"))
-                        ));
-            }while(c.moveToNext());
+                ));
+            } while (c.moveToNext());
         }
         return result;
-     }
+    }
 
-     public void addToCart(Order order)
-     {
-         SQLiteDatabase db = getReadableDatabase();
-         String query = String.format("INSERT INTO OrderDetail(ProductId,ProductName,Quantity,Price,Discount) VALUES('%s','%s','%s','%s','%s');",
-                 order.getProductId(),
-                 order.getProductName(),
-                 order.getQuantity(),
-                 order.getPrice(),
-                 order.getDiscount());
-         db.execSQL(query);
-     }
+    public void addToCart(Order order) {
+        SQLiteDatabase db = getReadableDatabase();
+        String query = String.format("INSERT INTO OrderDetail(ProductId,ProductName,Quantity,Price,Discount) VALUES('%s','%s','%s','%s','%s');",
+                order.getProductId(),
+                order.getProductName(),
+                order.getQuantity(),
+                order.getPrice(),
+                order.getDiscount());
+        db.execSQL(query);
+    }
 
-    public void cleanCart(Order order)
-    {
+    public void cleanCart(Order order) {
         SQLiteDatabase db = getReadableDatabase();
         String query = String.format("DELETE FROM OrderDetail");
         db.execSQL(query);

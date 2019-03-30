@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import info.hoang8f.widget.FButton;
+
 
 public class Cart extends AppCompatActivity {
 
@@ -37,8 +39,10 @@ public class Cart extends AppCompatActivity {
     TextView txtTotalPrice;
     Button btnPlace;
 
+
     List<Order> cart = new ArrayList<>();
     CartAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,13 +53,13 @@ public class Cart extends AppCompatActivity {
         requests = database.getReference("Requests");
 
         //Init
-        recyclerView = (RecyclerView)findViewById(R.id.listCart);
+        recyclerView = (RecyclerView) findViewById(R.id.listCart);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        txtTotalPrice = (TextView)findViewById(R.id.total);
-        btnPlace = (Button)findViewById(R.id.btnPlaceOrder);
+        txtTotalPrice = (TextView) findViewById(R.id.total);
+        btnPlace = (Button) findViewById(R.id.btnPlaceOrder);
         btnPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,14 +119,14 @@ public class Cart extends AppCompatActivity {
 
     private void loadListFood() {
         cart = new Database(this).getCards();
-        adapter = new CartAdapter(cart,this);
+        adapter = new CartAdapter(cart, this);
         recyclerView.setAdapter(adapter);
 
         //Calculate total price
         int total = 0;
-        for(Order order:cart)
-            total+=(Integer.parseInt(order.getPrice()))*(Integer.parseInt(order.getQuantity()));
-        Locale locale = new Locale("en","US");
+        for (Order order : cart)
+            total += (Integer.parseInt(order.getPrice())) * (Integer.parseInt(order.getQuantity()));
+        Locale locale = new Locale("en", "US");
         NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
 
         txtTotalPrice.setText(fmt.format(total));
