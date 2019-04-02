@@ -27,7 +27,7 @@ public class OrderStatus extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_status);
-    // Firebase
+        // Firebase
 
         database = FirebaseDatabase.getInstance();
         requests = database.getReference("Requests");
@@ -38,7 +38,7 @@ public class OrderStatus extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         loadOrders(Common.currentUser.getPhone());
-        
+
 
 
     }
@@ -57,7 +57,7 @@ public class OrderStatus extends AppCompatActivity {
                 viewHolder.txtOrderStatus.setText(convertCodeToStatus(model.getStatus()));
                 viewHolder.txtOrderAddress.setText(model.getAddress());
                 viewHolder.txtOrderPhone.setText(model.getPhone());
-                
+
             }
 
         };
@@ -66,8 +66,8 @@ public class OrderStatus extends AppCompatActivity {
     }
 
     private String convertCodeToStatus(String status) {
-    if(status.equals("0"))
-        return "Placed";
+        if(status.equals("0"))
+            return "Placed";
         else if(status.equals("1"))
             return "On my way";
 

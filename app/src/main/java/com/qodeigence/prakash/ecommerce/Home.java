@@ -51,13 +51,13 @@ public class Home extends AppCompatActivity
         category = database.getReference("Category");
 
 
-                floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
+        floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               Intent cartIntent = new Intent(Home.this,Cart.class);
-               startActivity(cartIntent);
+                Intent cartIntent = new Intent(Home.this,Cart.class);
+                startActivity(cartIntent);
             }
         });
 
@@ -95,7 +95,7 @@ public class Home extends AppCompatActivity
                 viewHolder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
-                       //Get CategoryId and send to new Activity
+                        //Get CategoryId and send to new Activity
                         Intent foodList = new Intent(Home.this,FoodList.class);
                         //because categoryId is key, so we just get key of this item
                         foodList.putExtra("CategoryId",adapter.getRef(position).getKey());

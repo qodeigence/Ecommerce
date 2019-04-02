@@ -66,7 +66,7 @@ public class FoodList extends AppCompatActivity {
                 viewHolder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
-                      //Start new Activity
+                        //Start new Activity
                         Intent foodDetail = new Intent(FoodList.this,FoodDetail.class);
                         foodDetail.putExtra("FoodId",adapter.getRef(position).getKey()); //Send food id to new activity
                         startActivity(foodDetail);
