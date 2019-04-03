@@ -10,7 +10,11 @@
     <color name="overlayBackground">#7f333639</color>
     <color name="overlayActionBar">#0e0d0e</color>
 
+
     //Material SearchBar Light Theme Colors
+
+  //Material SearchBar Light Theme Colors
+
     <color name="searchBarIconColor">#3a3a3a</color>
     //Base
     <color name="searchBarPrimaryColor">#FFFFFF</color>
@@ -48,4 +52,8 @@
     <color name="searchBarHintColorDark">#42FFFFFF</color>
     <color name="searchBarPlaceholderColorDark">#8AFFFFFF</color>
     <color name="searchBarTextHighlightColorDark">#BF00a1ff</color>
+
+
+
+
 </resources>
