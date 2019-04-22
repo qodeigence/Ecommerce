@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.qodeigence.prakash.ecommerce.Interface.ItemClickListener;
 import com.qodeigence.prakash.ecommerce.R;
 
-public class MenuViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class MenuViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
     public TextView txtMenuName;
     public ImageView imageView;
@@ -17,8 +17,9 @@ public class MenuViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
     public MenuViewHolder(View itemView) {
         super(itemView);
-        txtMenuName = (TextView)itemView.findViewById(R.id.menu_name);
-        imageView = (ImageView)itemView.findViewById(R.id.menu_image);
+
+        txtMenuName = itemView.findViewById(R.id.menu_name);
+        imageView = itemView.findViewById(R.id.menu_image);
 
         itemView.setOnClickListener(this);
     }
@@ -28,7 +29,7 @@ public class MenuViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     }
 
     @Override
-    public void onClick(View view) {
-        itemClickListener.onClick(view,getAdapterPosition(),false);
+    public void onClick(View v) {
+        itemClickListener.onClick(v,getAdapterPosition(),false);
     }
 }

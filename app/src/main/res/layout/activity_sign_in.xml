@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
+    android:background="@drawable/my_bg"
     tools:context=".SignIn">
 
     <LinearLayout
@@ -13,32 +13,45 @@
         android:layout_marginRight="8dp"
         android:layout_centerInParent="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout2">
 
-        <EditText
+        <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/edtPhone"
             android:hint="Phone Number"
-            android:text="09021446889"
-            android:textColor="@android:color/white"
-            android:textColorHint="@android:color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColorHint="@android:color/white"
+            android:text="8975020593"
+            android:textColor="@android:color/white"
             android:textSize="34sp"
             android:inputType="phone"
+            app:met_baseColor="@android:color/white"
+            app:met_floatingLabel="highlight"
+            app:met_maxCharacters="12"
+            app:met_primaryColor="@android:color/white"
+            app:met_singleLineEllipsis="true"
             />
-        <EditText
+
+        <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/edtPassword"
             android:hint="Password"
-            android:text="phirke@321"
-            android:textColor="@android:color/white"
-            android:textColorHint="@android:color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColorHint="@android:color/white"
+            android:text="Prakash@123"
+            android:textColor="@android:color/white"
             android:textSize="34sp"
             android:inputType="textPassword"
+            app:met_baseColor="@android:color/white"
+            app:met_floatingLabel="highlight"
+            app:met_minCharacters="4"
+            app:met_primaryColor="@android:color/white"
+            app:met_singleLineEllipsis="true"
             />
 
     </LinearLayout>
+
     <Button
         android:id="@+id/btnSignIn"
         android:text="Sign In"
@@ -49,7 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:shadowColor="@android:color/black"
-        android:background="@color/btnSignActive"
+        android:background="@color/btnSignUpActive"
         android:layout_margin="8dp"/>
 
 

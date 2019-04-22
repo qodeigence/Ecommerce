@@ -4,11 +4,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.qodeigence.prakash.ecommerce.Common.Common;
+import com.qodeigence.prakash.ecommerce.Interface.ItemClickListener;
 import com.qodeigence.prakash.ecommerce.Model.Order;
 import com.qodeigence.prakash.ecommerce.Model.Request;
 import com.qodeigence.prakash.ecommerce.ViewHolder.OrderViewHolder;
@@ -16,10 +18,11 @@ import com.qodeigence.prakash.ecommerce.ViewHolder.OrderViewHolder;
 public class OrderStatus extends AppCompatActivity {
 
     public RecyclerView recyclerView;
-    public  RecyclerView.LayoutManager layoutManager;
+    public RecyclerView.LayoutManager layoutManager;
 
-    FirebaseRecyclerAdapter<Request, OrderViewHolder> adapter;
+    FirebaseRecyclerAdapter<Request, OrderViewHolder>  adapter;
 
+    //Firebase
     FirebaseDatabase database;
     DatabaseReference requests;
 
@@ -27,21 +30,25 @@ public class OrderStatus extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_status);
-        // Firebase
-    // Firebase
 
-        database = FirebaseDatabase.getInstance();
+        //Init Firebase
+        database  = FirebaseDatabase.getInstance();
         requests = database.getReference("Requests");
 
-        recyclerView = (RecyclerView)findViewById(R.id.listOrders);
+        recyclerView = findViewById(R.id.listOrders);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
+        // Jka kita memulai OrderStatus aktivity daur Home Aktivity
+        // Kita tidak akan melakuakn Put Extra apapun, jadi kita hanya loadOrder dengan menggunakan No Hp dari Common.
+
+        if (getIntent() == null)
+            loadOrders(Common.currentUser.getPhone());
+        else
+            loadOrders(getIntent().getStringExtra("userPhone"));
+
         loadOrders(Common.currentUser.getPhone());
-
-
-
     }
 
     private void loadOrders(String phone) {
@@ -55,25 +62,18 @@ public class OrderStatus extends AppCompatActivity {
             @Override
             protected void populateViewHolder(OrderViewHolder viewHolder, Request model, int position) {
                 viewHolder.txtOrderId.setText(adapter.getRef(position).getKey());
-                viewHolder.txtOrderStatus.setText(convertCodeToStatus(model.getStatus()));
-                viewHolder.txtOrderAddress.setText(model.getAddress());
+                viewHolder.txtOrderStatus.setText(Common.convertCodeToStatus(model.getStatus()));
+                viewHolder.txtOrderAddres.setText(model.getAddress());
                 viewHolder.txtOrderPhone.setText(model.getPhone());
-        }
 
+                viewHolder.setItemClickListener(new ItemClickListener() {
+                    @Override
+                    public void onClick(View view, int position, boolean isLongClick) {
+
+                    }
+                });
+            }
         };
-
         recyclerView.setAdapter(adapter);
-    }
-
-    private String convertCodeToStatus(String status) {
-
-    if(status.equals("0"))
-        return "Placed";
-        else if(status.equals("1"))
-            return "On my way";
-
-        else
-            return "Shipped";
-
     }
 }

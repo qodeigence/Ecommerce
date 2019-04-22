@@ -1,20 +1,28 @@
 package com.qodeigence.prakash.ecommerce.Model;
 
 public class User {
-    private String Name;
+    private String Nama;
     private String Password;
     private String Phone;
+    private String IsStaff;
 
     public User() {
 
     }
 
-    public User(String name, String password) {
-        Name = name;
+    public User(String nama, String password) {
+        Nama = nama;
         Password = password;
-
+        IsStaff = "false";
     }
 
+    public String getIsStaff() {
+        return IsStaff;
+    }
+
+    public void setIsStaff(String isStaff) {
+        IsStaff = isStaff;
+    }
 
     public String getPhone() {
         return Phone;
@@ -24,12 +32,12 @@ public class User {
         Phone = phone;
     }
 
-    public String getName() {
-        return Name;
+    public String getNama() {
+        return Nama;
     }
 
-    public void setName(String name) {
-        Name = name;
+    public void setNama(String nama) {
+        Nama = nama;
     }
 
     public String getPassword() {

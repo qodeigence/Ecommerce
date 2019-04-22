@@ -4,16 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
+    android:background="@drawable/my_bg"
     tools:context=".OrderStatus">
 
-    <view class="android.support.v7.widget.RecyclerView"
+
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/listOrders"
         android:background="@android:color/transparent"
-
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+    </android.support.v7.widget.RecyclerView>
 
-    </view>
+
 
 </RelativeLayout>

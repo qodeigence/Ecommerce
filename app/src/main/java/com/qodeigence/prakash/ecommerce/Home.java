@@ -1,6 +1,7 @@
 package com.qodeigence.prakash.ecommerce;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.qodeigence.prakash.ecommerce.service.ListenOrder;
 import com.squareup.picasso.Picasso;
 import com.qodeigence.prakash.ecommerce.Common.Common;
 import com.qodeigence.prakash.ecommerce.Interface.ItemClickListener;
@@ -30,19 +32,23 @@ import com.qodeigence.prakash.ecommerce.ViewHolder.MenuViewHolder;
 
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
     FirebaseDatabase database;
     DatabaseReference category;
-    TextView txtFullName;
-    FloatingActionButton floatingActionButton;
+
+    TextView txtFullName, menu_name;
+
     RecyclerView recycler_menu;
     RecyclerView.LayoutManager layoutManager;
 
     FirebaseRecyclerAdapter<Category, MenuViewHolder> adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Menu");
         setSupportActionBar(toolbar);
 
@@ -50,11 +56,8 @@ public class Home extends AppCompatActivity
         database = FirebaseDatabase.getInstance();
         category = database.getReference("Category");
 
-
-        floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
-
-
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent cartIntent = new Intent(Home.this,Cart.class);
@@ -62,31 +65,43 @@ public class Home extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
+        drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //Set name for user
+        // Set Name For User
         View headerView = navigationView.getHeaderView(0);
-        txtFullName = (TextView)headerView.findViewById(R.id.txtFullName);
-        txtFullName.setText(Common.currentUser.getName());
+        navigationView.getBackground().setColorFilter(0x80000000, PorterDuff.Mode.MULTIPLY);
+        txtFullName = headerView.findViewById(R.id.txtFullName);
+        txtFullName.setText(Common.currentUser.getNama());
 
         //Load Menu
-        recycler_menu = (RecyclerView)findViewById(R.id.recycler_menu);
+        recycler_menu = findViewById(R.id.recycle_menu);
         recycler_menu.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recycler_menu.setLayoutManager(layoutManager);
 
-        loadMenu();
+        if (Common.isConnectedToInternet(this)) {
+            loadMenu();
+        }else {
+            Toast.makeText(Home.this, "Please check your internet connection!", Toast.LENGTH_SHORT).show();
+        }
+
+        //Register Sevice
+        Intent service = new Intent(Home.this, ListenOrder.class);
+        startService(service);
+
     }
 
     private void loadMenu() {
-        adapter = new FirebaseRecyclerAdapter<Category, MenuViewHolder>(Category.class,R.layout.menu_item,MenuViewHolder.class,category) {
+
+        adapter = new FirebaseRecyclerAdapter<Category,
+                MenuViewHolder>(Category.class,R.layout.menu_item,MenuViewHolder.class,category) {
             @Override
             protected void populateViewHolder(MenuViewHolder viewHolder, Category model, int position) {
                 viewHolder.txtMenuName.setText(model.getName());
@@ -96,18 +111,16 @@ public class Home extends AppCompatActivity
                 viewHolder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
-                        //Get CategoryId and send to new Activity
-                        Intent foodList = new Intent(Home.this,FoodList.class);
-                        //because categoryId is key, so we just get key of this item
-                        foodList.putExtra("CategoryId",adapter.getRef(position).getKey());
-                        startActivity(foodList);
+                        //Get CategoryId and Send to new activity
+                        Intent intent = new Intent(Home.this, FoodList.class);
+                        //Karena kategori adalah key, maka kita hanya mendapatkan key dari item ini saja
+                        intent.putExtra("CategoryId", adapter.getRef(position).getKey());
+                        startActivity(intent);
                     }
                 });
             }
         };
         recycler_menu.setAdapter(adapter);
-
-
     }
 
     @Override
@@ -129,7 +142,13 @@ public class Home extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        //noinspection SimplifiableIfStatement
+        if (item.getItemId() == R.id.refresh) {
+            loadMenu();
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -139,25 +158,21 @@ public class Home extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        if(id == R.id.nav_menu){
 
-        }else if(id == R.id.nav_cart){
+        if (id == R.id.nav_menu) {
+
+        } else if (id == R.id.nav_cart) {
             Intent cartIntent = new Intent(Home.this, Cart.class);
             startActivity(cartIntent);
-
-        }else if(id == R.id.nav_orders){
+        } else if (id == R.id.nav_order) {
             Intent orderIntent = new Intent(Home.this, OrderStatus.class);
             startActivity(orderIntent);
-
-        }else if(id == R.id.nav_log_out){
-            // LogOut
-
-            Intent signIn = new Intent(Home.this,SignIn.class);
-            signIn.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        } else if (id == R.id.nav_logout) {
+            //Logout
+            Intent signIn = new Intent(Home.this, SignIn.class);
+            signIn.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Agar tidak bisa menekan tombol kembali setelah di LogOut
             startActivity(signIn);
-
         }
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
